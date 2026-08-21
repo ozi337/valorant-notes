@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ranked Improvement Framework</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --card: #171a21;
+    --card-border: #2a2f3a;
+    --accent: #ff4655;
+    --accent-soft: #ff465522;
+    --text: #e8e9ed;
+    --text-dim: #a4a8b3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 20px 80px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 {
+    font-size: 1.7rem;
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+  }
+  .tldr {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 36px;
+  }
+  .tldr h2 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+  }
+  .tldr ul { margin: 12px 0 0; padding-left: 20px; }
+  .tldr li { margin-bottom: 8px; font-size: 0.95rem; }
+  .tldr b { color: #fff; }
+
+  details {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+  details[open] { border-color: var(--accent); }
+
+  summary {
+    cursor: pointer;
+    padding: 16px 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    user-select: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: "+";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 1rem;
+    font-weight: 700;
+    transition: transform 0.15s ease;
+  }
+  details[open] summary::before {
+    content: "–";
+  }
+  .sec-num {
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .teaser {
+    display: block;
+    font-weight: 400;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+  summary .titles { display: flex; flex-direction: column; }
+
+  .body-content {
+    padding: 4px 20px 22px 54px;
+    color: var(--text-dim);
+  }
+  .body-content h4 {
+    color: var(--text);
+    margin: 16px 0 6px;
+    font-size: 0.95rem;
+  }
+  .body-content h4:first-child { margin-top: 0; }
+  .body-content ul { padding-left: 20px; margin: 8px 0; }
+  .body-content li { margin-bottom: 6px; }
+  .body-content b { color: var(--text); }
+  .body-content p { margin: 8px 0; }
+
+  footer {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 480px) {
+    .body-content { padding-left: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Ranked Improvement Framework</h1>
+  <div class="subtitle">Mental model + pre-round protocol for treating ranked as a training ground, not a scoreboard.</div>
+
+  <div class="tldr">
+    <h2>TL;DR — Shorthand Refresher (Read This First)</h2>
+    <ul>
+      <li><b>Teammates = bots.</b> Mute toxics instantly. You can't control them, don't try.</li>
+      <li><b>Play selfishly for YOU.</b> Rank is a byproduct, not the goal.</li>
+      <li><b>Pick 2 focuses per game</b> (never aim). Have your duo set 1 if they know you well.</li>
+      <li><b>Assess on EVERY death</b> – only against those 2 focuses. Verbally if duo is dead too.</li>
+      <li><b>Write down fuzzy rounds.</b> Review 1–2 with duo for 5–10 min post-game (non-negotiable if serious).</li>
+      <li><b>M.U.T every round:</b> Press TAB instantly – classify the round type (Money), track Ults & ult-econ, identify Tendencies for "If X, then Y" plans.</li>
+      <li><b>Kill pre-round autopilot:</b> Use the full buy phase to formulate your specific plan. No 20s zoning out + 5s rushed plan.</li>
+      <li><b>Full comms every round</b> – plan + info + clean on-death calls. Keep comms even after muting toxics.</li>
+      <li><b>Death = data.</b> 3-sec breath reset before next round. Don't carry tilt.</li>
+      <li><b>Match outcome = coin flip.</b> Ignore it. Every round is a rep toward long-term growth.</li>
+      <li><b>Stop-loss at 2–3 losses.</b> No "chasing wins" – review, break, or call it.</li>
+      <li><b>Blame = weak mental.</b> Any second on them is 90% of your learning time wasted.</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>
+      <span class="sec-num">01</span>
+      <span class="titles">Mindset Towards Teammates
+        <span class="teaser">Mute liberally, expect nothing</span>
+      </span>
+    </summary>
+    <div class="body-content">
+      <ul>
+        <li><b>Assume all teammates are bots until proven otherwise</b> – you wouldn't complain about AI, so don't complain about them. You cannot control them.</li>
+        <li><b>Mute liberally:</b> The moment a teammate is toxic or back-seat gaming, mute their comms and pings. Protecting your mental state is part of your job as a player.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="sec-num">02</span>
+      <span class="titles">The Core Priority: Be "Selfish" for Improvement
+        <span class="teaser">2 focuses, assess on every death, review after</span>
+      </span>
+    </summary>
+    <div class="body-content">
+      <ul>
+        <li>You are playing ranked <b>to improve yourself as a player</b>, not to win a specific match.</li>
+        <li>Proper improvement cycle starts with specific FOCUSES & consistent self assessment on death. Trying to improve 'everything at once' is a waste of time. That's not how our brains work.</li>
+        <li>Before the game starts, announce to your duo the <b>2 specific things</b> you are focusing on improving that game. As a modifier, if you know your duo well, allow 1 of your focuses to be set by your DUO as it then serves as a way to improve an issue they're noticing you do that may be in your blind spot.
+          <br><i>Note: Aim is never one of them (mechanics are a given; focus on decision-making, positioning, utility, or game sense).</i>
+        </li>
+        <li>On <b>EVERY death</b>, assess yourself strictly on those two things only.</li>
+        <li>If both you and your duo are dead, <b>assess it verbally</b> out loud – this builds the critical habit of active self-review in real-time.</li>
+        <li>Have a piece of paper/notepad in front of you & write down the rounds where you struggled to assess it well or were unsure. Look at 1-2 rounds each in VOD w/ duo straight after that scrim instead of instantly re-queueing. Do this for 5-10 min total so it feels easy & achievable. If you can't convince yourself to do this, acknowledge you aren't serious about improving.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="sec-num">03</span>
+      <span class="titles">Pre-Round Protocol (M.U.T + Execution)
+        <span class="teaser">TAB instantly, classify the round, kill autopilot</span>
+      </span>
+    </summary>
+    <div class="body-content">
+      <h4>M.U.T Protocol (Money / Ults / Tendencies)</h4>
+      <ul>
+        <li><b>Action:</b> Hit TAB instantly when the round starts. Run this sequence every round.</li>
+        <li><b>Money (Round Classification):</b>
+          <ul>
+            <li>Assess both teams' economies immediately.</li>
+            <li>Correctly classify the round type (eco, anti-eco, bonus, anti-bonus, full gun, gun+ults/ops).</li>
+            <li>Let the round type dictate your buy, positioning, and risk tolerance.</li>
+          </ul>
+        </li>
+        <li><b>Ults (Ult Economy):</b>
+          <ul>
+            <li>Check who has ult and who is 1 point away.</li>
+            <li>Set a concrete plan for your own ult usage before the barrier drops.</li>
+            <li>Predict enemy execs – if they have win-condition ults, pre-plan non-hold responses (flanks/backstabs) rather than fighting site directly.</li>
+            <li>Set trap plays on orbs when enemies are 1 off.</li>
+          </ul>
+        </li>
+        <li><b>Tendencies (Patterns & Punishes):</b>
+          <ul>
+            <li>Identify what the enemy has done in similar situations previously.</li>
+            <li>Build an explicit "If X, then Y" response in real-time.</li>
+            <li>Advanced step – use mental capital to punish predictable patterns.</li>
+          </ul>
+        </li>
+        <li><b>Objective:</b> Press TAB 12 times a half. Instantly recognize the round type and have a plan before the barrier drops.</li>
+      </ul>
+
+      <h4>Pre-Round Execution (Kill the Downtime)</h4>
+      <ul>
+        <li><b>Eliminate autopilot:</b>
+          <ul>
+            <li>Stop wasting the 20-second buy-phase zoning out.</li>
+            <li>Stop the 5-second rushed half-plan at the barrier.</li>
+          </ul>
+        </li>
+        <li><b>Deliberate action:</b> Use the pre-round window to actively formulate your specific "If X, then Y" plan based on identified tendencies (from MUT or your own reads).</li>
+        <li><b>Execution:</b> Lock in your positioning, route, and early-util play before the barrier drops.</li>
+        <li><b>Application:</b> Apply this individually for your own role, or call it out in comms as a team-wide adjustment.</li>
+        <li><b>Goal:</b> Enter every round with a hypothesis, not a daydream. No more blind autopilot.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="sec-num">04</span>
+      <span class="titles">Proper Comms
+        <span class="teaser">Full comms every round, no exceptions</span>
+      </span>
+    </summary>
+    <div class="body-content">
+      <ul>
+        <li>Everyone needs to improve comms & ranked is a phenomenal way to get repeated reps on this. <b>Give full comms every single fucking round.</b></li>
+        <li>That means: Give a simple plan or @ minimum say what you will do that round. Full info/action comms. Proper clean on death comms.</li>
+        <li>If teammates are being toxic, mute them & keep giving full comms. It allows you to keep improving & as a bonus it undermines them as it displays you will not be affected by their toxicity.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="sec-num">05</span>
+      <span class="titles">The Round-to-Round Reset
+        <span class="teaser">Death is data — 3-second breath, no tilt carry</span>
+      </span>
+    </summary>
+    <div class="body-content">
+      <ul>
+        <li><b>Death is data, not punishment.</b> On death, take one slow deep breath (3 sec in through nose/3 sec out through mouth) and fully reset your mental before the next round starts.</li>
+        <li><b>Do not carry frustration</b> from the previous round into the buy phase. A tilted player makes the same mistake twice; a disciplined player makes it once and moves on.</li>
+        <li>If you lose 2–3 rounds in a row due to bad luck or team diff, <b>shrug it off</b> – remember, the game is designed as a coin flip. Your only job is to execute your personal focus points perfectly, regardless of the scoreboard.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="sec-num">06</span>
+      <span class="titles">The Long-Term Perspective
+        <span class="teaser">Ignore the outcome, trust the compounding</span>
+      </span>
+    </summary>
+    <div class="body-content">
+      <ul>
+        <li>By doing this, <b>every single round</b> of every match becomes a productive rep towards improvement – regardless of the final result.</li>
+        <li>Over weeks and months, this compounding effect will naturally raise your floor as a player, and your rank will inevitably follow. <b>Ranking up becomes a byproduct</b>, not the goal.</li>
+        <li>Focusing on the outcome of any individual game is a <b>fool's errand</b>.
+          <ul><li>Each game is essentially a coin flip by design (that's what keeps the ranked cycle addictive).</li></ul>
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="sec-num">07</span>
+      <span class="titles">The "Stop-Loss" Rule
+        <span class="teaser">2–3 losses in a row = stop queuing</span>
+      </span>
+    </summary>
+    <div class="body-content">
+      <ul>
+        <li><b>Set a hard limit:</b> If you lose 2–3 ranked games in a row, stop queuing immediately.</li>
+        <li>Do not "play through" the tilt to chase a win. Go review your VOD together, take a 30-minute break, or call it a day.</li>
+        <li>Forcing games while fatigued or tilted is the #1 way to reinforce bad habits – which directly contradicts your entire improvement process.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="sec-num">08</span>
+      <span class="titles">The Blame Trap
+        <span class="teaser">Blaming teammates = wasted learning time</span>
+      </span>
+    </summary>
+    <div class="body-content">
+      <ul>
+        <li>Allowing yourself to tilt, cope, or blame teammates is <b>fundamentally weak mental</b> and proves you don't understand the process.</li>
+        <li>If you waste energy on them, you are actively throwing away <b>90% of your potential learning time</b> in Valorant. Every second spent typing or complaining is a second you are not assessing your own decision-making.</li>
+      </ul>
+    </div>
+  </details>
+
+  <footer>Click any section to expand · TL;DR always visible above</footer>
+</div>
+</body>
+</html>
